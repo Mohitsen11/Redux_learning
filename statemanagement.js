@@ -1,5 +1,5 @@
-// Learning createStore redux function
-import { createStore } from 'redux';
+// Learning createStore and bindActionCreators redux function
+import { bindActionCreators, createStore } from 'redux';
 
 function TodoReducer(state , action){
 
@@ -44,6 +44,21 @@ console.log(store.getState());
 // subscribe ( callback function inside this method gets executed when a dispatch of actions occurs)
 store.subscribe(() => console.log(store.getState()));
 
-//dispatch ( to change the state of the application or to update something )
-store.dispatch({type : 'add_todo' , payload : {todoText : 'todo 2'}});
+// create action creators
+const addTodo = (todoText) => ({type : 'add_todo' , payload : {todoText : todoText}});
+const deleteTodo = (id) => ({type : 'delete_todo' , payload : {id : id}});
 
+//dispatch ( to change the state of the application or to update something )
+store.dispatch(addTodo('todo 2'));
+store.dispatch(addTodo('todo 3'));
+store .dispatch(deleteTodo(2));
+
+// we have created action creators its good but we have to still write store.dispatch to dispatch an action
+// so the third function (bindActionCreators) gives a solution by binding the action creators with dispatch method
+
+const action = bindActionCreators({addTodo , deleteTodo} , store.dispatch);
+
+action.addTodo('todo 5')
+action.addTodo('todo 6');
+action.addTodo('todo 7');
+action.deleteTodo(5);
