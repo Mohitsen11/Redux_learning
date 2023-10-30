@@ -28,4 +28,6 @@ console.log(result1 , result2 , result3);
 
 const composedFunction = compose(removeSpaces , repeatString , makeUpperCase);
 
+console.log(makeUpperCase(repeatString(removeSpaces("hi my name is mohit"))))
+
 console.log(composedFunction("hi my name is mohit"))
