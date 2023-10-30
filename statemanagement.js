@@ -1,12 +1,17 @@
 // Learning createStore and bindActionCreators redux function
 import { bindActionCreators, createStore } from 'redux';
 
+const ADD_TODO = 'add_todo';
+const EDIT_TODO = 'edit_todo';
+const DELETE_TODO = 'delete_todo';
+const FINISH_TODO = 'finish_todo';
+
 function TodoReducer(state , action){
 
-    if(action.type == 'add_todo'){
+    if(action.type == ADD_TODO){
         let nextId = state.length + 1;
         return ([...state , { id : nextId , text : action.payload.todoText, isFinished : false}])
-    } else if( action.type == 'edit_todo'){
+    } else if( action.type == EDIT_TODO){
         const newTodo = state.map((todo) => {
             if(todo.id == action.payload.id){
                 todo.text = action.payload.todoText
@@ -15,11 +20,11 @@ function TodoReducer(state , action){
         })
 
         return newTodo;
-    } else if(action.type == 'delete_todo'){
+    } else if(action.type == DELETE_TODO){
         const newTodo = state.filter((todo) => todo.id != action.payload.id);
   
         return newTodo;
-    } else if(action.type == 'finish_todo'){
+    } else if(action.type == FINISH_TODO){
         const newTodo = state.map((todo) => {
             if(todo.id == action.payload.id){
                 todo.isFinished = action.payload.isFinished
