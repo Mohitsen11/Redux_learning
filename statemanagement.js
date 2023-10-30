@@ -1,12 +1,13 @@
 // Learning createStore and bindActionCreators redux function
-import { bindActionCreators, createStore } from 'redux';
+import { bindActionCreators, combineReducers, createStore } from 'redux';
 
 const ADD_TODO = 'add_todo';
 const EDIT_TODO = 'edit_todo';
 const DELETE_TODO = 'delete_todo';
 const FINISH_TODO = 'finish_todo';
 
-function TodoReducer(state , action){
+const ADD_USER = 'add_user';
+function TodoReducer(state = [], action){
 
     if(action.type == ADD_TODO){
         let nextId = state.length + 1;
@@ -39,7 +40,17 @@ function TodoReducer(state , action){
     return state;
 }
 
-const store = createStore(TodoReducer , [{id : 1 , text: 'todo 1' , isFinished : false}]);
+function UserReducer(state = [], action){
+    if(action.type == ADD_USER){
+        let nextId = state.length + 1;
+        return [...state , {id : nextId , user : action.payload.user}];
+    }
+
+    return state;
+}
+
+const reducer = combineReducers({users : UserReducer , todos : TodoReducer})
+const store = createStore(reducer);
 
 console.log(store);
 
@@ -50,8 +61,9 @@ console.log(store.getState());
 store.subscribe(() => console.log(store.getState()));
 
 // create action creators
-const addTodo = (todoText) => ({type : 'add_todo' , payload : {todoText : todoText}});
-const deleteTodo = (id) => ({type : 'delete_todo' , payload : {id : id}});
+const addTodo = (todoText) => ({type : ADD_TODO , payload : {todoText : todoText}});
+const deleteTodo = (id) => ({type : DELETE_TODO , payload : {id : id}});
+const addUser = (user) => ({type : ADD_USER , payload : {user : user}})
 
 //dispatch ( to change the state of the application or to update something )
 store.dispatch(addTodo('todo 2'));
@@ -61,9 +73,10 @@ store .dispatch(deleteTodo(2));
 // we have created action creators its good but we have to still write store.dispatch to dispatch an action
 // so the third function (bindActionCreators) gives a solution by binding the action creators with dispatch method
 
-const action = bindActionCreators({addTodo , deleteTodo} , store.dispatch);
+const action = bindActionCreators({addTodo , deleteTodo , addUser} , store.dispatch);
 
 action.addTodo('todo 5')
 action.addTodo('todo 6');
 action.addTodo('todo 7');
-action.deleteTodo(5);
+action.deleteTodo(4);
+action.addUser('mohit');
